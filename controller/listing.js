@@ -27,7 +27,40 @@ module.exports.showListings = async (req, res) => {
     }
     console.log(listing);
     res.render("./listings/show.ejs", { listing })
-}
+};
+module.exports.searchListings = async (req, res) => {
+    const { title } = req.query;
+
+    if (!title) {
+        req.flash("error", "Please enter a search term");
+        return res.redirect("/listings");
+    }
+
+    try {
+        const listings = await Listing.find({
+            $or: [
+                { title: { $regex: title, $options: "i" } }, // Match title
+                { description: { $regex: title, $options: "i" } }, // Match description
+            ],
+        }).populate({
+            path: "reviews",
+            populate: {
+                path: "author"
+            }
+        })
+        .populate("owner");
+        if (!listings.length) {
+            req.flash("error", "No listings found");
+            return res.redirect("/listings");
+        }
+
+        res.render("./listings/search.ejs", { listings, searchTerm: title });
+    } catch (err) {
+        console.error("Search Error:", err.message);
+        req.flash("error", "Something went wrong");
+        res.redirect("/listings");
+    }
+};
 
 module.exports.createListing = async (req, res) => {
     let url = req.file.path; // Corrected typo

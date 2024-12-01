@@ -1,0 +1,29 @@
+<% layout("./layouts/boilerplate.ejs") %>
+
+<div class="row mt-3 ">
+  <div class="col-8 offset-3">
+    <h4>Search Results for "<%= searchTerm %>"</h4>
+  </div>
+
+  <% for (let listing of listings) { %>
+    <div class="card col-8 offset-3 mb-3" style="width: 28rem; border: none;" >
+      <img src="<%= listing.image.url %>" class="card-img-top" alt="listing-image">
+      <div class="card-body">
+        <h5 class="card-title"><%= listing.title %></h5>
+        <p class="card-text">Owned by <i><%= listing.owner.username %></i></p>
+        <p class="card-text">
+          <%= listing.description %><br />
+          &#8377; <%= listing.price.toLocaleString("en-IN") %><br />
+          <%= listing.location %>, <%= listing.country %>
+        </p>
+        <a href="/listings/<%= listing._id %>" class="btn btn-primary">View Details</a>
+      </div>
+    </div>
+  <% } %>
+
+  <% if (!listings.length) { %>
+    <div class="col-8 offset-2">
+      <p>No results found for "<%= searchTerm %>"</p>
+    </div>
+  <% } %>
+</div>

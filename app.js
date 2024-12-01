@@ -86,6 +86,7 @@ app.use((err, req, res, next) => {
     const { status = 500, Message = "Something went wrong" } = err
     res.render("./listings/error.ejs", { Message });
 });
+
 app.listen(8080, () => {
     console.log("port is listining");
 })
