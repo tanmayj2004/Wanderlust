@@ -89,7 +89,7 @@ const Listing = require("./models/listing.js"); // Add at the top with other req
 
 app.get("/", wrapAsync(async (req, res) => {
     const listings = await Listing.find({});
-    res.render("listings/index", { listings });  // Adjust the view name if different
+    res.render("listings/index", { allListings: listings });  // Adjust the view name if different
 }));
 
 app.use("/listings", listingRouter);
