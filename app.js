@@ -85,9 +85,12 @@ const userRouter= require("./routes/user.js");
 const { error } = require('console');
 
 
-// app.get("/", (req, res) => {
-//     res.send("Hii,i am root");
-// });
+const Listing = require("./models/listing.js"); // Add at the top with other requires
+
+app.get("/", wrapAsync(async (req, res) => {
+    const listings = await Listing.find({});
+    res.render("listings/index", { listings });  // Adjust the view name if different
+}));
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
